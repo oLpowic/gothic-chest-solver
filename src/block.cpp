@@ -1,4 +1,5 @@
 #include "block.hpp"
+#include "dependent_block.hpp"
 #include <algorithm>
 #include <stdexcept>
 #include <string>
@@ -20,20 +21,64 @@ uint16_t Block::getPosition() const {
 }
 
 // Functions
-bool Block::isAtMiddle() const {
+const bool Block::isAtMiddle() const {
     return position == MIDDLE_POSITION;
 }
 
-void Block::moveBlock(MoveDirection move){
+const bool Block::isMovePossible(MoveDirection move) const {
     if(move == MoveDirection::LEFT) {
-        if(position == 0) throw std::out_of_range("Cannot move left from position 0");
-        --position;
-    } else if(move == MoveDirection::RIGHT) {
-        if(position == MAX_POSITION) throw std::out_of_range("Cannot move right from position " + std::to_string(MAX_POSITION));
-        ++position;
+        if(position == 0) return false;
+        else return true;
+    }
+    if(move == MoveDirection::RIGHT) {
+        if(position == MAX_POSITION) return false;
+        else return true;
+    }
+    return false;
+}
+
+void Block::makeMove(MoveDirection move){
+  if (move == MoveDirection::LEFT) {
+    --position;
+  }
+  if (move == MoveDirection::RIGHT) {
+    ++position;
+  }
+}
+
+bool Block::canMoveBlocks(MoveDirection move) const {
+    if (!isMovePossible(move))
+        return false;
+
+    for (const auto& dependentBlock : dependentBlocks) {
+        auto depMove = dependentBlock->getMoveDirection();
+        auto block = dependentBlock->getBlock().get();
+
+        if (!block->isMovePossible(depMove))
+            return false;
+    }
+
+    return true;
+}
+
+void Block::applyMoveBlocks(MoveDirection move) {
+    makeMove(move);
+
+    for (auto& dependentBlock : dependentBlocks) {
+        auto depMove = dependentBlock->getMoveDirection();
+        auto block = dependentBlock->getBlock().get();
+
+        block->makeMove(depMove);
     }
 }
 
+bool Block::moveBlocks(MoveDirection move) {
+    if (!canMoveBlocks(move))
+        return false;
+
+    applyMoveBlocks(move);
+    return true;
+}
 
 // Printing
 std::string Block::to_string() const {

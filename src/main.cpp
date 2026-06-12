@@ -59,11 +59,7 @@ void main1() {
 
     Solver solver(blocks);
 
-    std::println("Is the puzzle solved? {}", solver.is_solved());
+    std::println("Is the puzzle solved? {}", solver.isSolved());
 
     std::println("Moving block 0 to the right...");
-    block->moveBlock(MoveDirection::RIGHT);
-    std::println("{}", block->visualizeBlock().c_str());
-    block->moveBlock(MoveDirection::LEFT);
-    std::println("{}", block->visualizeBlock().c_str());
 }

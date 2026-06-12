@@ -11,4 +11,6 @@ class DependentBlock {
     
 public:
     DependentBlock(std::shared_ptr<Block> block, MoveDirection moveDirection);
+    std::shared_ptr<Block> getBlock() const;
+    const MoveDirection& getMoveDirection() const;
 };

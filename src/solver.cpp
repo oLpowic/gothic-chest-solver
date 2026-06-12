@@ -12,7 +12,7 @@ Solver::Solver(std::vector<std::shared_ptr<Block>> allBlocks) : allBlocks(allBlo
         if(std::unique(allBlocks.begin(),
         allBlocks.end(), 
         [](const std::shared_ptr<Block>& a, const std::shared_ptr<Block>& b) {
-            return a->getBlockPosition() == b->getBlockPosition();
+            return a == b;
         }) != allBlocks.end()) {
             throw std::invalid_argument("Duplicate block positions are not allowed.");
         }
@@ -23,7 +23,7 @@ Solver::~Solver() {
 }
 
 
-bool Solver::is_solved() const{ 
+bool Solver::isSolved() const{ 
     if(allBlocks.empty()) return false;
 
     for(const auto& block : allBlocks){
@@ -31,4 +31,6 @@ bool Solver::is_solved() const{
     }
     return true;
 }
+
+
 

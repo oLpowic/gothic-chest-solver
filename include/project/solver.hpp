@@ -15,6 +15,6 @@ Solver(std::vector<std::shared_ptr<Block>> allBlocks);
 ~Solver();
 
 std::vector<std::shared_ptr<Block>> getAllBlocks() const { return allBlocks; }
-bool is_solved() const;
+bool isSolved() const;
 
 };
