@@ -10,22 +10,22 @@
 #include "dependent_block.hpp"
 #include "solver.hpp"
 
-void main1();
+void test();
 
 int main(int argc, char* argv[])
 {
     if(argc > 1 && std::string(argv[1]) == "test") {
         std::println("Running tests...");
-        // Here you would call your test functions
+        test();
         return 0;
     }
 
-    main1();
+
     return 0;
 }
 
 
-void main1() {
+void test() {
     std::println("Hello, World!\n");
     std::vector<std::shared_ptr<Block>> blocks;
 
@@ -60,6 +60,13 @@ void main1() {
     Solver solver(blocks);
 
     std::println("Is the puzzle solved? {}", solver.isSolved());
-
+    
     std::println("Moving block 0 to the right...");
+    block->moveBlocks(MoveDirection::RIGHT);
+    std::println("{}",block->visualizeBlock().c_str());
+    std::println("Moving block 0 to the left...");
+    block->moveBlocks(MoveDirection::LEFT);
+    std::println("{}",block->visualizeBlock().c_str());
+    
+
 }

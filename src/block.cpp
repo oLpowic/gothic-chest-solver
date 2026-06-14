@@ -1,8 +1,11 @@
 #include "block.hpp"
 #include "dependent_block.hpp"
 #include <algorithm>
+#include <chrono>
+#include <memory>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 Block::Block(uint16_t blockPosition, uint16_t position)
     : blockPosition(blockPosition) {
@@ -10,8 +13,20 @@ Block::Block(uint16_t blockPosition, uint16_t position)
     this->position = position;
 }
 
+Block::Block(uint16_t blockPosition, uint16_t position, std::vector<std::shared_ptr<DependentBlock>> dependentBlocks)
+    : blockPosition(blockPosition), dependentBlocks(std::move(dependentBlocks)) {
+    if (position > MAX_POSITION) throw std::invalid_argument("position must be between 0 and " + std::to_string(MAX_POSITION));
+    this->position = position;
+}
+
 Block::~Block() = default;
 
+
+void Block::addDependentBlocks(const std::vector<std::shared_ptr<DependentBlock>>& depBlocks){
+    if(!depBlocks.empty()) {
+        dependentBlocks = depBlocks;
+    }
+}
 // Getters
 uint16_t Block::getBlockPosition() const {
     return blockPosition;
@@ -103,3 +118,10 @@ std::string Block::visualizeBlock() const {
     return visualization;
 }
 
+std::string Block::visualizeWithDepBlocks() const {
+    std::string result = std::to_string(position) + visualizeBlock();
+    for(const auto& depBlocks : dependentBlocks) {
+        result += std::to_string(depBlocks->getBlock()->getPosition()) + depBlocks->getBlock()->visualizeBlock();
+    }
+    return result;
+}

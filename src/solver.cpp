@@ -12,15 +12,13 @@ Solver::Solver(std::vector<std::shared_ptr<Block>> allBlocks) : allBlocks(allBlo
         if(std::unique(allBlocks.begin(),
         allBlocks.end(), 
         [](const std::shared_ptr<Block>& a, const std::shared_ptr<Block>& b) {
-            return a == b;
+            return a->getBlockPosition() == b->getBlockPosition();
         }) != allBlocks.end()) {
             throw std::invalid_argument("Duplicate block positions are not allowed.");
         }
     };
 
-Solver::~Solver() {
-    allBlocks.clear();
-}
+Solver::~Solver() {}
 
 
 bool Solver::isSolved() const{ 

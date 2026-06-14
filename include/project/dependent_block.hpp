@@ -7,7 +7,7 @@ enum class MoveDirection;
 
 class DependentBlock {
     MoveDirection moveDirection;
-    std::shared_ptr<Block> block;
+    std::weak_ptr<Block> block;
     
 public:
     DependentBlock(std::shared_ptr<Block> block, MoveDirection moveDirection);
