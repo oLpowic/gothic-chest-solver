@@ -2,19 +2,19 @@
 #include <utility>
 
 Solver::Solver(std::vector<std::unique_ptr<Block>> allBlocks) : allBlocks(std::move(allBlocks)) {
-        std::sort(this->allBlocks.begin(), 
-        this->allBlocks.end(), 
-        [](const std::unique_ptr<Block>& a, const std::unique_ptr<Block>& b) {
-            return a->getBlockPosition() < b->getBlockPosition();
-        });
+        // std::sort(this->allBlocks.begin(), 
+        // this->allBlocks.end(), 
+        // [](const std::unique_ptr<Block>& a, const std::unique_ptr<Block>& b) {
+        //     return a->getBlockPosition() < b->getBlockPosition();
+        // });
 
-        if(std::unique(this->allBlocks.begin(),
-        this->allBlocks.end(), 
-        [](const std::unique_ptr<Block>& a, const std::unique_ptr<Block>& b) {
-            return a->getBlockPosition() == b->getBlockPosition();
-        }) != this->allBlocks.end()) {
-            throw std::invalid_argument("Duplicate block positions are not allowed.");
-        }
+        // if(std::unique(this->allBlocks.begin(),
+        // this->allBlocks.end(), 
+        // [](const std::unique_ptr<Block>& a, const std::unique_ptr<Block>& b) {
+        //     return a->getBlockPosition() == b->getBlockPosition();
+        // }) != this->allBlocks.end()) {
+        //     throw std::invalid_argument("Duplicate block positions are not allowed.");
+        // }
     };
 
 Solver::~Solver() = default;

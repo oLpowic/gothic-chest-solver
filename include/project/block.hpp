@@ -11,7 +11,6 @@
 
 class Block {
 private:
-    uint16_t blockPosition;
     uint16_t position;
     std::vector<DependentBlock> dependentBlocks;
 
@@ -20,11 +19,10 @@ private:
     void applyMoveBlocks(MoveDirection move);
     
 public:
-    Block(uint16_t blockPosition, uint16_t position);
-    Block(uint16_t blockPosition, uint16_t position, std::vector<DependentBlock> dependentBlocks);
+    Block(uint16_t position);
+    Block(uint16_t position, std::vector<DependentBlock> dependentBlocks);
     ~Block();
 
-    uint16_t getBlockPosition() const;
     uint16_t getPosition() const;
 
     std::string to_string() const;
@@ -35,7 +33,4 @@ public:
     bool moveBlocks(MoveDirection move);
     void addDependentBlocks(const std::vector<DependentBlock>& depBlocks);
 
-    bool operator==(const Block& other) const {
-        return this->blockPosition == other.blockPosition;
-    }
 };

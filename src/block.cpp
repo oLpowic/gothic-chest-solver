@@ -5,14 +5,13 @@
 #include <utility>
 #include <vector>
 
-Block::Block(uint16_t blockPosition, uint16_t position)
-    : blockPosition(blockPosition) {
+Block::Block(uint16_t position) {
     if (position > MAX_POSITION) throw std::invalid_argument("position must be between 0 and " + std::to_string(MAX_POSITION));
     this->position = position;
 }
 
-Block::Block(uint16_t blockPosition, uint16_t position, std::vector<DependentBlock> dependentBlocks)
-    : blockPosition(blockPosition), dependentBlocks(std::move(dependentBlocks)) {
+Block::Block(uint16_t position, std::vector<DependentBlock> dependentBlocks)
+    : dependentBlocks(std::move(dependentBlocks)) {
     if (position > MAX_POSITION) throw std::invalid_argument("position must be between 0 and " + std::to_string(MAX_POSITION));
     this->position = position;
 }
@@ -23,10 +22,6 @@ void Block::addDependentBlocks(const std::vector<DependentBlock>& depBlocks){
     if(!depBlocks.empty()) {
         dependentBlocks = depBlocks;
     }
-}
-
-uint16_t Block::getBlockPosition() const {
-    return blockPosition;
 }
 
 uint16_t Block::getPosition() const {
@@ -93,8 +88,7 @@ bool Block::moveBlocks(MoveDirection move) {
 }
 
 std::string Block::to_string() const {
-    return std::string("Block ") + std::to_string(blockPosition)
-        + " at position " + std::to_string(position);
+    return std::string("Block ") + " at position " + std::to_string(position);
 }
 
 std::string Block::visualizeBlock() const {

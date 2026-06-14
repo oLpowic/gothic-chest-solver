@@ -26,13 +26,13 @@ void test() {
     std::println("Hello, World!\n");
     std::vector<std::unique_ptr<Block>> blocks;
 
-    blocks.push_back(std::make_unique<Block>(0, 0));
-    blocks.push_back(std::make_unique<Block>(1, 1));
-    blocks.push_back(std::make_unique<Block>(2, 2));
-    blocks.push_back(std::make_unique<Block>(3, 3));
-    blocks.push_back(std::make_unique<Block>(4, 4));
-    blocks.push_back(std::make_unique<Block>(5, 5));
-    blocks.push_back(std::make_unique<Block>(6, 6));
+    blocks.push_back(std::make_unique<Block>(0));
+    blocks.push_back(std::make_unique<Block>(1));
+    blocks.push_back(std::make_unique<Block>(2));
+    blocks.push_back(std::make_unique<Block>(3));
+    blocks.push_back(std::make_unique<Block>(4));
+    blocks.push_back(std::make_unique<Block>(5));
+    blocks.push_back(std::make_unique<Block>(6));
 
     auto* block = blocks[0].get();
 
