@@ -1,25 +1,23 @@
 #include "solver.hpp"
+#include <utility>
 
-Solver::Solver(std::vector<std::shared_ptr<Block>> allBlocks) : allBlocks(allBlocks) {
-        // Sort blocks by blockPosition
-        std::sort(allBlocks.begin(), 
-        allBlocks.end(), 
-        [](const std::shared_ptr<Block>& a, const std::shared_ptr<Block>& b) {
+Solver::Solver(std::vector<std::unique_ptr<Block>> allBlocks) : allBlocks(std::move(allBlocks)) {
+        std::sort(this->allBlocks.begin(), 
+        this->allBlocks.end(), 
+        [](const std::unique_ptr<Block>& a, const std::unique_ptr<Block>& b) {
             return a->getBlockPosition() < b->getBlockPosition();
         });
 
-        // Check for duplicates
-        if(std::unique(allBlocks.begin(),
-        allBlocks.end(), 
-        [](const std::shared_ptr<Block>& a, const std::shared_ptr<Block>& b) {
+        if(std::unique(this->allBlocks.begin(),
+        this->allBlocks.end(), 
+        [](const std::unique_ptr<Block>& a, const std::unique_ptr<Block>& b) {
             return a->getBlockPosition() == b->getBlockPosition();
-        }) != allBlocks.end()) {
+        }) != this->allBlocks.end()) {
             throw std::invalid_argument("Duplicate block positions are not allowed.");
         }
     };
 
-Solver::~Solver() {}
-
+Solver::~Solver() = default;
 
 bool Solver::isSolved() const{ 
     if(allBlocks.empty()) return false;
@@ -29,6 +27,3 @@ bool Solver::isSolved() const{
     }
     return true;
 }
-
-
-

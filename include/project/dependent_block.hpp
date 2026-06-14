@@ -1,16 +1,14 @@
 #pragma once
 
-#include <memory>
-
 class Block;
 enum class MoveDirection;
 
 class DependentBlock {
     MoveDirection moveDirection;
-    std::weak_ptr<Block> block;
+    Block* block;
     
 public:
-    DependentBlock(std::shared_ptr<Block> block, MoveDirection moveDirection);
-    std::shared_ptr<Block> getBlock() const;
+    DependentBlock(Block* block, MoveDirection moveDirection);
+    Block* getBlock() const;
     const MoveDirection& getMoveDirection() const;
 };

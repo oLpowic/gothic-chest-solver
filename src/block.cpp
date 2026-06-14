@@ -1,10 +1,8 @@
 #include "block.hpp"
 #include "dependent_block.hpp"
-#include <algorithm>
-#include <chrono>
-#include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 Block::Block(uint16_t blockPosition, uint16_t position)
@@ -13,7 +11,7 @@ Block::Block(uint16_t blockPosition, uint16_t position)
     this->position = position;
 }
 
-Block::Block(uint16_t blockPosition, uint16_t position, std::vector<std::shared_ptr<DependentBlock>> dependentBlocks)
+Block::Block(uint16_t blockPosition, uint16_t position, std::vector<DependentBlock> dependentBlocks)
     : blockPosition(blockPosition), dependentBlocks(std::move(dependentBlocks)) {
     if (position > MAX_POSITION) throw std::invalid_argument("position must be between 0 and " + std::to_string(MAX_POSITION));
     this->position = position;
@@ -21,21 +19,20 @@ Block::Block(uint16_t blockPosition, uint16_t position, std::vector<std::shared_
 
 Block::~Block() = default;
 
-
-void Block::addDependentBlocks(const std::vector<std::shared_ptr<DependentBlock>>& depBlocks){
+void Block::addDependentBlocks(const std::vector<DependentBlock>& depBlocks){
     if(!depBlocks.empty()) {
         dependentBlocks = depBlocks;
     }
 }
-// Getters
+
 uint16_t Block::getBlockPosition() const {
     return blockPosition;
 }
+
 uint16_t Block::getPosition() const {
     return position;
 }
 
-// Functions
 const bool Block::isAtMiddle() const {
     return position == MIDDLE_POSITION;
 }
@@ -66,8 +63,8 @@ bool Block::canMoveBlocks(MoveDirection move) const {
         return false;
 
     for (const auto& dependentBlock : dependentBlocks) {
-        auto depMove = dependentBlock->getMoveDirection();
-        auto block = dependentBlock->getBlock().get();
+        auto depMove = dependentBlock.getMoveDirection();
+        auto* block = dependentBlock.getBlock();
 
         if (!block->isMovePossible(depMove))
             return false;
@@ -79,9 +76,9 @@ bool Block::canMoveBlocks(MoveDirection move) const {
 void Block::applyMoveBlocks(MoveDirection move) {
     makeMove(move);
 
-    for (auto& dependentBlock : dependentBlocks) {
-        auto depMove = dependentBlock->getMoveDirection();
-        auto block = dependentBlock->getBlock().get();
+    for (const auto& dependentBlock : dependentBlocks) {
+        auto depMove = dependentBlock.getMoveDirection();
+        auto* block = dependentBlock.getBlock();
 
         block->makeMove(depMove);
     }
@@ -95,7 +92,6 @@ bool Block::moveBlocks(MoveDirection move) {
     return true;
 }
 
-// Printing
 std::string Block::to_string() const {
     return std::string("Block ") + std::to_string(blockPosition)
         + " at position " + std::to_string(position);
@@ -121,7 +117,7 @@ std::string Block::visualizeBlock() const {
 std::string Block::visualizeWithDepBlocks() const {
     std::string result = std::to_string(position) + visualizeBlock();
     for(const auto& depBlocks : dependentBlocks) {
-        result += std::to_string(depBlocks->getBlock()->getPosition()) + depBlocks->getBlock()->visualizeBlock();
+        result += std::to_string(depBlocks.getBlock()->getPosition()) + depBlocks.getBlock()->visualizeBlock();
     }
     return result;
 }
